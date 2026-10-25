@@ -1,4 +1,4 @@
-# TourShield API - Turismo e Reservas | PB TP2
+# TourShield API - Turismo e Reservas | PB TP3
 
 **Helena Gomes | 25/10/2026**
 
@@ -7,7 +7,35 @@ ownership, headers, CORS e rate limiting. Foco: fraude de benefícios e geolocal
 Não há modelo de ML nem agente; /predict é placeholder e as reservas são recursos locais
 de demonstração, sem efetuar compra ou conceder benefícios.
 
-Repositório: https://github.com/lenagomesz/tourshield-api-pb-tp1 (continuação do TP1).
+Repositório: https://github.com/lenagomesz/tourshield-api-pb-tp1 (continuação dos TP1/TP2).
+
+## Entrega TP3 - consolidação e transição para T2
+
+- [Notebook de regressão](eda/regression_tp3.ipynb) e [fonte executável](eda/regression_tp3.py):
+  baseline, regressão simples e múltipla, Pipeline, R²/RMSE e resíduos/Q-Q.
+- [Relatório de regressão](reports/tp3/regression_report.md).
+- [Pergunta de classificação e 20 classes](docs/classification_question_tp3.md).
+- [Plano técnico T2](docs/t2_plan_tp3.md): TF-IDF + regressão logística e protocolo de avaliação.
+- [Auditoria final/checklist](docs/audit_final_tp3.md), [ZAP JSON](reports/zap_tp3/zap-report.json),
+  [findings](reports/zap_tp3/findings.md).
+- [Workflow CI](.github/workflows/security-tests.yml), [execução e proteção da main](reports/tp3/ci_evidence.json).
+- [PDF TP3](output/pdf/Helena_Gomes_PB_TP3.PDF).
+
+**Pendência informada pela aluna:** colega adversário, URL/IP e confirmação de acesso
+ainda não foram definidos. O planejamento registra isso explicitamente; não foi feito
+pentest contra terceiro. Prontidão local da própria API foi verificada.
+
+```powershell
+python eda/regression_tp3.py
+python -m scripts.build_regression_notebook
+pytest tests/ -v
+python -m scripts.run_zap --tp3
+```
+
+`/docs` está ativo com Swagger UI 5.34.0 self-hosted, assets verificados por SRI/hash,
+sem CDN, scripts inline ou persistência de tokens. CSP específica permite assets e
+requests somente da própria origem. O CI roda em push/PR, falha com pytest não-zero e
+o check security-tests é exigido na main. Histórico TP2 segue abaixo.
 
 ## Evidências TP2
 
@@ -47,7 +75,7 @@ as transitivas. O banco TP1 tem campos de usuários compatíveis; SQLModel cria 
 de reservas sem apagar usuários existentes.
 
 Servidor local: http://127.0.0.1:8000. /health é público; contrato em /openapi.json.
-Swagger (/docs) e Redoc foram desativados para manter CSP fechada. HSTS não protege
+Redoc permanece desativado; /docs agora usa assets locais com CSP própria. HSTS não protege
 HTTP puro: HTTPS é obrigatório fora do desenvolvimento em loopback. O scan usa HTTPS.
 `--reload` é de desenvolvimento; o limiter deste TP suporta apenas um processo/worker.
 
@@ -155,5 +183,13 @@ docs/                    # OWASP, DFD, CIA e entrega
 output/pdf/              # Helena_Gomes_PB_TP1.PDF e Helena_Gomes_PB_TP2.PDF
 ```
 
-Orientações finais: [entrega TP2](docs/delivery_tp2.md). O relatório TP1 permanece como
-histórico; os controles e limites atuais são os documentados em docs/owasp_tp2.md.
+Para laboratório de pentest local, configure DATABASE_PATH=./pentest.sqlite3 no .env
+e execute `python -m scripts.seed_pentest`. Cria duas contas fictícias e reservas;
+senhas e IDs ficam somente em tmp/pentest-credentials.json, ignorado pelo Git. Não
+publique esse arquivo. Loopback não é endereço acessível por colega remoto.
+
+PDF TP3: instale requirements-report.txt e execute `python -m scripts.build_report_tp3`
+após os notebooks, testes, scan e evidência do CI. A geração não resolve a pendência externa.
+
+Orientações finais: [entrega TP3](docs/delivery_tp3.md). TP1 e TP2 permanecem como
+histórico; auditoria e limites atuais estão em docs/audit_final_tp3.md.
