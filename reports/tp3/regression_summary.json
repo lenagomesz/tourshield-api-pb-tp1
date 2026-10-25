@@ -1,0 +1,117 @@
+{
+  "target": "n_words",
+  "features": [
+    "n_chars",
+    "n_digits",
+    "n_punctuation",
+    "uppercase_ratio"
+  ],
+  "retained_features": [
+    "n_chars",
+    "n_digits",
+    "n_punctuation"
+  ],
+  "train_n": 2000,
+  "val_n": 400,
+  "test_n": 600,
+  "mean_residual": -0.09043957771675287,
+  "std_residual": 1.3081896140434834,
+  "skewness": 0.26363675921229623,
+  "excess_kurtosis": 0.3520675020352524,
+  "abs_residual_prediction_spearman": 0.16105495434651357,
+  "negative_predictions": 0,
+  "test_predicted_min": 2.5690434431623324,
+  "test_predicted_max": 24.769817249008398,
+  "intercept": 10.367,
+  "zero_variance_train_features": [
+    "uppercase_ratio"
+  ],
+  "metrics": [
+    {
+      "model": "baseline_mean",
+      "split": "train",
+      "n": 2000,
+      "r2": 0.0,
+      "rmse_words": 3.493753139533473,
+      "mae_words": 2.7847470000000003
+    },
+    {
+      "model": "baseline_mean",
+      "split": "val",
+      "n": 400,
+      "r2": -0.0022940360840097984,
+      "rmse_words": 4.170041246798405,
+      "mae_words": 3.280765
+    },
+    {
+      "model": "baseline_mean",
+      "split": "test",
+      "n": 600,
+      "r2": -0.011586235969528236,
+      "rmse_words": 3.787412353221304,
+      "mae_words": 3.044303333333334
+    },
+    {
+      "model": "linear_simple",
+      "split": "train",
+      "n": 2000,
+      "r2": 0.8664890932668728,
+      "rmse_words": 1.276587501692126,
+      "mae_words": 1.0054338743370088
+    },
+    {
+      "model": "linear_simple",
+      "split": "val",
+      "n": 400,
+      "r2": 0.9000786061494006,
+      "rmse_words": 1.3166550808896649,
+      "mae_words": 1.0712670427180284
+    },
+    {
+      "model": "linear_simple",
+      "split": "test",
+      "n": 600,
+      "r2": 0.874669381718211,
+      "rmse_words": 1.3331214817933201,
+      "mae_words": 1.0558769863872026
+    },
+    {
+      "model": "linear_multiple",
+      "split": "train",
+      "n": 2000,
+      "r2": 0.8718286769018687,
+      "rmse_words": 1.2507993568183802,
+      "mae_words": 0.9965417025861669
+    },
+    {
+      "model": "linear_multiple",
+      "split": "val",
+      "n": 400,
+      "r2": 0.9033081297649209,
+      "rmse_words": 1.2952027500456458,
+      "mae_words": 1.0574857724150686
+    },
+    {
+      "model": "linear_multiple",
+      "split": "test",
+      "n": 600,
+      "r2": 0.8789377122314351,
+      "rmse_words": 1.3102240711922792,
+      "mae_words": 1.0401437699178069
+    }
+  ],
+  "coefficients": [
+    {
+      "feature": "n_chars",
+      "coefficient_per_train_sd": 3.1975555059649325
+    },
+    {
+      "feature": "n_digits",
+      "coefficient_per_train_sd": 0.26333747946687847
+    },
+    {
+      "feature": "n_punctuation",
+      "coefficient_per_train_sd": -0.20281441332432665
+    }
+  ]
+}

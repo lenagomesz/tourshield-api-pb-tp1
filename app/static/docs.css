@@ -1,0 +1,5 @@
+body { margin: 0; background: #fff; color: #12334a; font-family: Arial, sans-serif; }
+header { max-width: 1400px; margin: auto; padding: 24px 20px; }
+header h1 { color: #16898c; }
+header p { line-height: 1.5; }
+header a { color: #23618a; }

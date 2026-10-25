@@ -14,3 +14,4 @@ ipykernel==7.4.0
 sqlmodel==0.0.48
 scipy==1.18.1
 seaborn==0.13.2
+scikit-learn==1.9.1

@@ -22,6 +22,8 @@ HEADERS = {
     "cache-control": "no-store",
     "pragma": "no-cache",
 }
+DOCS_CSP = ("default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; "
+            "font-src 'self'; connect-src 'self'; frame-ancestors 'none'; base-uri 'none'; form-action 'self'")
 
 
 class LoginLimiter:
@@ -73,7 +75,10 @@ class WebSecurity:
                 status = message["status"]
                 names = {k.encode() for k in HEADERS}
                 headers = [(k,v) for k,v in message.get("headers", []) if k.lower() not in names]
-                headers += [(k.encode(),v.encode()) for k,v in HEADERS.items()]
+                values = dict(HEADERS)
+                if scope["path"] == "/docs":
+                    values["content-security-policy"] = DOCS_CSP
+                headers += [(k.encode(),v.encode()) for k,v in values.items()]
                 headers.append((b"x-request-id", request_id.encode()))
                 message["headers"] = headers
             await send(message)

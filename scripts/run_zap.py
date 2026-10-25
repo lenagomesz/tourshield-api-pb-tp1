@@ -1,5 +1,6 @@
 """Real passive-only ZAP audit against disposable local HTTPS TourShield."""
 from datetime import datetime, timezone
+import argparse
 import json
 import os
 from pathlib import Path
@@ -23,6 +24,12 @@ def free_port():
 
 
 def main():
+    global OUT
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--tp3", action="store_true", help="Audit v0.3 including self-hosted /docs")
+    args = parser.parse_args()
+    if args.tp3:
+        OUT = ROOT / "reports" / "zap_tp3"
     run = ROOT / "tmp" / ("zap-" + secrets.token_hex(4))
     run.mkdir(parents=True)
     OUT.mkdir(parents=True, exist_ok=True)
@@ -96,6 +103,10 @@ def main():
                 return r
             request("GET", "/health", 200)
             request("GET", "/openapi.json", 200)
+            if args.tp3:
+                for asset in ["/docs", "/static/swagger/swagger-ui.css", "/static/swagger/swagger-ui-bundle.js",
+                              "/static/docs-init.js", "/static/docs.css"]:
+                    request("GET", asset, 200)
             request("GET", "/missing", 404)
             request("POST", "/predict", 401, json={"message": "hotel request"})
             for name in ["scan-alice", "scan-bob"]:

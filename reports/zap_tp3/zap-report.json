@@ -1,0 +1,373 @@
+{
+	"@programName": "ZAP",
+	"@version": "2.17.0",
+	"@generated": "Sun, 25 Oct 2026 08:53:34",
+	"created": "2026-10-25T11:53:34.871579200Z",
+	"insights":[
+		{
+			"level": "Low",
+			"reason": "Warning",
+			"site": "",
+			"key": "insight.log.error",
+			"description": "ZAP errors logged - see the zap.log file for details",
+			"statistic": "1"
+		},
+		{
+			"level": "Low",
+			"reason": "Warning",
+			"site": "",
+			"key": "insight.log.warn",
+			"description": "ZAP warnings logged - see the zap.log file for details",
+			"statistic": "2"
+		},
+		{
+			"level": "Info",
+			"reason": "Informational",
+			"site": "https://localhost:61150",
+			"key": "insight.code.2xx",
+			"description": "Percentage of responses with status code 2xx",
+			"statistic": "52"
+		},
+		{
+			"level": "Info",
+			"reason": "Informational",
+			"site": "https://localhost:61150",
+			"key": "insight.code.4xx",
+			"description": "Percentage of responses with status code 4xx",
+			"statistic": "48"
+		},
+		{
+			"level": "Info",
+			"reason": "Informational",
+			"site": "https://localhost:61150",
+			"key": "insight.endpoint.ctype.application/json",
+			"description": "Percentage of endpoints with content type application/json",
+			"statistic": "64"
+		},
+		{
+			"level": "Info",
+			"reason": "Informational",
+			"site": "https://localhost:61150",
+			"key": "insight.endpoint.ctype.text/css",
+			"description": "Percentage of endpoints with content type text/css",
+			"statistic": "11"
+		},
+		{
+			"level": "Info",
+			"reason": "Informational",
+			"site": "https://localhost:61150",
+			"key": "insight.endpoint.ctype.text/html",
+			"description": "Percentage of endpoints with content type text/html",
+			"statistic": "5"
+		},
+		{
+			"level": "Info",
+			"reason": "Informational",
+			"site": "https://localhost:61150",
+			"key": "insight.endpoint.ctype.text/javascript",
+			"description": "Percentage of endpoints with content type text/javascript",
+			"statistic": "11"
+		},
+		{
+			"level": "Info",
+			"reason": "Informational",
+			"site": "https://localhost:61150",
+			"key": "insight.endpoint.ctype.text/plain",
+			"description": "Percentage of endpoints with content type text/plain",
+			"statistic": "5"
+		},
+		{
+			"level": "Info",
+			"reason": "Informational",
+			"site": "https://localhost:61150",
+			"key": "insight.endpoint.method.GET",
+			"description": "Percentage of endpoints with method GET",
+			"statistic": "52"
+		},
+		{
+			"level": "Info",
+			"reason": "Informational",
+			"site": "https://localhost:61150",
+			"key": "insight.endpoint.method.OPTIONS",
+			"description": "Percentage of endpoints with method OPTIONS",
+			"statistic": "5"
+		},
+		{
+			"level": "Info",
+			"reason": "Informational",
+			"site": "https://localhost:61150",
+			"key": "insight.endpoint.method.POST",
+			"description": "Percentage of endpoints with method POST",
+			"statistic": "41"
+		},
+		{
+			"level": "Info",
+			"reason": "Informational",
+			"site": "https://localhost:61150",
+			"key": "insight.endpoint.total",
+			"description": "Count of total endpoints",
+			"statistic": "17"
+		},
+		{
+			"level": "Info",
+			"reason": "Informational",
+			"site": "https://localhost:61150",
+			"key": "insight.response.slow",
+			"description": "Percentage of slow responses",
+			"statistic": "8"
+		}
+	],
+	"site":[ 
+		{
+			"@name": "https://localhost:61150",
+			"@host": "localhost",
+			"@port": "61150",
+			"@ssl": "true",
+			"alerts": [ 
+				{
+					"pluginid": "10096",
+					"alertRef": "10096",
+					"alert": "Timestamp Disclosure - Unix",
+					"name": "Timestamp Disclosure - Unix",
+					"riskcode": "1",
+					"confidence": "1",
+					"riskdesc": "Low (Low)",
+					"desc": "<p>A timestamp was disclosed by the application/web server. - Unix</p>",
+					"instances":[ 
+						{
+							"id": "13",
+							"uri": "https://localhost:61150/static/swagger/swagger-ui-bundle.js",
+							"nodeName": "https:\/\/localhost:61150\/static\/swagger\/swagger-ui-bundle.js",
+							"method": "GET",
+							"param": "",
+							"attack": "",
+							"evidence": "1518500249",
+							"otherinfo": "1518500249, which evaluates to: 2018-02-13 03:37:29."
+						},
+						{
+							"id": "16",
+							"uri": "https://localhost:61150/static/swagger/swagger-ui-bundle.js",
+							"nodeName": "https:\/\/localhost:61150\/static\/swagger\/swagger-ui-bundle.js",
+							"method": "GET",
+							"param": "",
+							"attack": "",
+							"evidence": "1732584193",
+							"otherinfo": "1732584193, which evaluates to: 2024-11-25 22:23:13."
+						},
+						{
+							"id": "21",
+							"uri": "https://localhost:61150/static/swagger/swagger-ui-bundle.js",
+							"nodeName": "https:\/\/localhost:61150\/static\/swagger\/swagger-ui-bundle.js",
+							"method": "GET",
+							"param": "",
+							"attack": "",
+							"evidence": "1750603025",
+							"otherinfo": "1750603025, which evaluates to: 2025-06-22 11:37:05."
+						},
+						{
+							"id": "14",
+							"uri": "https://localhost:61150/static/swagger/swagger-ui-bundle.js",
+							"nodeName": "https:\/\/localhost:61150\/static\/swagger\/swagger-ui-bundle.js",
+							"method": "GET",
+							"param": "",
+							"attack": "",
+							"evidence": "1859775393",
+							"otherinfo": "1859775393, which evaluates to: 2028-12-07 01:16:33."
+						},
+						{
+							"id": "15",
+							"uri": "https://localhost:61150/static/swagger/swagger-ui-bundle.js",
+							"nodeName": "https:\/\/localhost:61150\/static\/swagger\/swagger-ui-bundle.js",
+							"method": "GET",
+							"param": "",
+							"attack": "",
+							"evidence": "1894007588",
+							"otherinfo": "1894007588, which evaluates to: 2030-01-07 06:13:08."
+						}
+					],
+					"count": "5",
+					"systemic": true,
+					"solution": "<p>Manually confirm that the timestamp data is not sensitive, and that the data cannot be aggregated to disclose exploitable patterns.</p>",
+					"otherinfo": "<p>1518500249, which evaluates to: 2018-02-13 03:37:29.</p>",
+					"reference": "<p>https://cwe.mitre.org/data/definitions/200.html</p>",
+					"cweid": "497",
+					"wascid": "13",
+					"sourceid": "8"
+				},
+				{
+					"pluginid": "10111",
+					"alertRef": "10111",
+					"alert": "Authentication Request Identified",
+					"name": "Authentication Request Identified",
+					"riskcode": "0",
+					"confidence": "1",
+					"riskdesc": "Informational (Low)",
+					"desc": "<p>The given request has been identified as an authentication request. The 'Other Info' field contains a set of key=value lines which identify any relevant fields. If the request is in a context which has an Authentication Method set to \"Auto-Detect\" then this rule will change the authentication to match the request identified.</p>",
+					"instances":[ 
+						{
+							"id": "11",
+							"uri": "https://localhost:61150/auth/token",
+							"nodeName": "https:\/\/localhost:61150\/auth\/token ()(admin,password,username)",
+							"method": "POST",
+							"param": "username",
+							"attack": "",
+							"evidence": "password",
+							"otherinfo": "userParam=username\nuserValue=scan-alice\npasswordParam=password"
+						},
+						{
+							"id": "3",
+							"uri": "https://localhost:61150/auth/token",
+							"nodeName": "https:\/\/localhost:61150\/auth\/token ()(password,username)",
+							"method": "POST",
+							"param": "username",
+							"attack": "",
+							"evidence": "password",
+							"otherinfo": "userParam=username\nuserValue=scan-alice\npasswordParam=password"
+						}
+					],
+					"count": "2",
+					"systemic": false,
+					"solution": "<p>This is an informational alert rather than a vulnerability and so there is nothing to fix.</p>",
+					"otherinfo": "<p>userParam=username</p><p>userValue=scan-alice</p><p>passwordParam=password</p>",
+					"reference": "<p>https://www.zaproxy.org/docs/desktop/addons/authentication-helper/auth-req-id/</p>",
+					"cweid": "-1",
+					"wascid": "-1",
+					"sourceid": "27"
+				},
+				{
+					"pluginid": "10027",
+					"alertRef": "10027",
+					"alert": "Information Disclosure - Suspicious Comments",
+					"name": "Information Disclosure - Suspicious Comments",
+					"riskcode": "0",
+					"confidence": "1",
+					"riskdesc": "Informational (Low)",
+					"desc": "<p>The response appears to contain suspicious comments which may help an attacker.</p>",
+					"instances":[ 
+						{
+							"id": "12",
+							"uri": "https://localhost:61150/static/swagger/swagger-ui-bundle.js",
+							"nodeName": "https:\/\/localhost:61150\/static\/swagger\/swagger-ui-bundle.js",
+							"method": "GET",
+							"param": "",
+							"attack": "",
+							"evidence": "query",
+							"otherinfo": "The following pattern was used: \\bQUERY\\b and was detected in likely comment: \"//\",\"$\"),z=COMMENT(\"/\\\\*\",\"\\\\*/\"),U=COMMENT(\"#\",\"$\"),Y={className:\"number\",begin:w,relevance:0},Z={className:\"number\",begin:x,re\", see evidence field for the suspicious comment/snippet."
+						}
+					],
+					"count": "1",
+					"systemic": false,
+					"solution": "<p>Remove all comments that return information that may help an attacker and fix any underlying problems they refer to.</p>",
+					"otherinfo": "<p>The following pattern was used: \\bQUERY\\b and was detected in likely comment: \"//\",\"$\"),z=COMMENT(\"/\\\\*\",\"\\\\*/\"),U=COMMENT(\"#\",\"$\"),Y={className:\"number\",begin:w,relevance:0},Z={className:\"number\",begin:x,re\", see evidence field for the suspicious comment/snippet.</p>",
+					"reference": "",
+					"cweid": "615",
+					"wascid": "13",
+					"sourceid": "8"
+				},
+				{
+					"pluginid": "10015",
+					"alertRef": "10015",
+					"alert": "Re-examine Cache-control Directives",
+					"name": "Re-examine Cache-control Directives",
+					"riskcode": "0",
+					"confidence": "1",
+					"riskdesc": "Informational (Low)",
+					"desc": "<p>The cache-control header has not been set properly or is missing, allowing the browser and proxies to cache content. For static assets like css, js, or image files this might be intended, however, the resources should be reviewed to ensure that no sensitive content will be cached.</p>",
+					"instances":[ 
+						{
+							"id": "2",
+							"uri": "https://localhost:61150/docs",
+							"nodeName": "https:\/\/localhost:61150\/docs",
+							"method": "GET",
+							"param": "cache-control",
+							"attack": "",
+							"evidence": "no-store",
+							"otherinfo": ""
+						},
+						{
+							"id": "0",
+							"uri": "https://localhost:61150/health",
+							"nodeName": "https:\/\/localhost:61150\/health",
+							"method": "GET",
+							"param": "cache-control",
+							"attack": "",
+							"evidence": "no-store",
+							"otherinfo": ""
+						},
+						{
+							"id": "1",
+							"uri": "https://localhost:61150/openapi.json",
+							"nodeName": "https:\/\/localhost:61150\/openapi.json",
+							"method": "GET",
+							"param": "cache-control",
+							"attack": "",
+							"evidence": "no-store",
+							"otherinfo": ""
+						},
+						{
+							"id": "8",
+							"uri": "https://localhost:61150/reservations/7a2aeaf9-2b1a-4600-9e01-efde570a5c9a",
+							"nodeName": "https:\/\/localhost:61150\/reservations\/7a2aeaf9-2b1a-4600-9e01-efde570a5c9a",
+							"method": "GET",
+							"param": "cache-control",
+							"attack": "",
+							"evidence": "no-store",
+							"otherinfo": ""
+						},
+						{
+							"id": "10",
+							"uri": "https://localhost:61150/predict",
+							"nodeName": "https:\/\/localhost:61150\/predict",
+							"method": "OPTIONS",
+							"param": "cache-control",
+							"attack": "",
+							"evidence": "no-store",
+							"otherinfo": ""
+						}
+					],
+					"count": "5",
+					"systemic": true,
+					"solution": "<p>For secure content, ensure the cache-control HTTP header is set with \"no-cache, no-store, must-revalidate\". If an asset should be cached consider setting the directives \"public, max-age, immutable\".</p>",
+					"otherinfo": "",
+					"reference": "<p>https://cheatsheetseries.owasp.org/cheatsheets/Session_Management_Cheat_Sheet.html#web-content-caching</p><p>https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Cache-Control</p><p>https://grayduck.mn/2021/09/13/cache-control-recommendations/</p>",
+					"cweid": "525",
+					"wascid": "13",
+					"sourceid": "4"
+				},
+				{
+					"pluginid": "10112",
+					"alertRef": "10112",
+					"alert": "Session Management Response Identified",
+					"name": "Session Management Response Identified",
+					"riskcode": "0",
+					"confidence": "3",
+					"riskdesc": "Informational (High)",
+					"desc": "<p>The given response has been identified as containing a session management token. The 'Other Info' field contains a set of header tokens that can be used in the Header Based Session Management Method. If the request is in a context which has a Session Management Method set to \"Auto-Detect\" then this rule will change the session management to use the tokens identified.</p>",
+					"instances":[ 
+						{
+							"id": "5",
+							"uri": "https://localhost:61150/auth/token",
+							"nodeName": "https:\/\/localhost:61150\/auth\/token ()(password,username)",
+							"method": "POST",
+							"param": "access_token",
+							"attack": "",
+							"evidence": "access_token",
+							"otherinfo": "json:access_token"
+						}
+					],
+					"count": "1",
+					"systemic": false,
+					"solution": "<p>This is an informational alert rather than a vulnerability and so there is nothing to fix.</p>",
+					"otherinfo": "<p>json:access_token</p>",
+					"reference": "<p>https://www.zaproxy.org/docs/desktop/addons/authentication-helper/session-mgmt-id/</p>",
+					"cweid": "-1",
+					"wascid": "-1",
+					"sourceid": "13"
+				}
+			]
+		}
+	],
+	"sequences":[
+	]
+
+}
