@@ -31,6 +31,6 @@ def current_user(token: str = Depends(oauth2_scheme)):
     except jwt.InvalidTokenError:
         raise unauthorized()
     user = find_user(claims["sub"])
-    if user is None or not user["active"]:
+    if user is None or not user.active:
         raise unauthorized()
-    return user["username"]
+    return user.username

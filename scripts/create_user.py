@@ -2,9 +2,9 @@
 import argparse
 import getpass
 import re
-import sqlite3
+from sqlalchemy.exc import IntegrityError
 from app.config import get_secret
-from app.database import connect, initialize
+from app.database import add_user, initialize
 from app.security import password_hash
 
 
@@ -22,10 +22,8 @@ def main():
         parser.error("Senhas diferentes")
     initialize()
     try:
-        with connect() as db:
-            db.execute("INSERT INTO users(username, password_hash) VALUES (?, ?)",
-                       (args.username, password_hash.hash(password)))
-    except sqlite3.IntegrityError:
+        add_user(args.username, password_hash.hash(password))
+    except IntegrityError:
         parser.error("Usuário já existe")
     print("Usuário criado; senha armazenada somente como hash Argon2.")
 

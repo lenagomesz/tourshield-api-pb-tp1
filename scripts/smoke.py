@@ -19,16 +19,15 @@ def main():
         env["JWT_SECRET"] = secrets.token_urlsafe(48)
         env["DATABASE_PATH"] = str(Path(folder) / "smoke.sqlite3")
         os.environ.update({k: env[k] for k in ["JWT_SECRET", "DATABASE_PATH"]})
-        from app.database import connect, initialize
+        from app.database import add_user, engine_for, initialize
         from app.security import password_hash
         initialize()
         password = secrets.token_urlsafe(24)
-        with connect() as db:
-            db.execute("INSERT INTO users VALUES (?, ?, 1)", ("smoke", password_hash.hash(password)))
+        add_user("smoke", password_hash.hash(password))
         with socket.socket() as sock:
             sock.bind(("127.0.0.1", 0))
             port = sock.getsockname()[1]
-        process = subprocess.Popen([sys.executable, "-m", "uvicorn", "main:app", "--host", "127.0.0.1", "--port", str(port)],
+        process = subprocess.Popen([sys.executable, "-m", "uvicorn", "main:app", "--no-proxy-headers", "--no-server-header", "--host", "127.0.0.1", "--port", str(port)],
                                    cwd=ROOT, env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
         try:
             with httpx.Client(base_url=f"http://127.0.0.1:{port}") as client:
@@ -54,8 +53,13 @@ def main():
                 (ROOT / "reports" / "smoke.json").write_text(json.dumps(result, indent=2, ensure_ascii=False), encoding="utf-8")
                 print(json.dumps(result, ensure_ascii=False))
         finally:
-            process.terminate()
+            if os.name == "nt":
+                subprocess.run(["taskkill", "/PID", str(process.pid), "/T", "/F"],
+                               stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, check=False)
+            else:
+                process.terminate()
             process.wait(timeout=10)
+            engine_for(env["DATABASE_PATH"]).dispose()
 
 
 if __name__ == "__main__":

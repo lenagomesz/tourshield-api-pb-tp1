@@ -4,7 +4,8 @@ import jwt
 import pytest
 from fastapi.testclient import TestClient
 from app.config import AUDIENCE, ISSUER
-from app.database import connect
+from app.database import User, add_user, connect, engine_for
+from app.middleware import login_limiter
 from app.security import password_hash
 from main import app
 
@@ -13,11 +14,11 @@ from main import app
 def client(tmp_path, monkeypatch):
     monkeypatch.setenv("JWT_SECRET", secrets.token_urlsafe(48))
     monkeypatch.setenv("DATABASE_PATH", str(tmp_path / "test.sqlite3"))
+    login_limiter.reset()
     with TestClient(app) as c:
-        with connect() as db:
-            db.execute("INSERT INTO users VALUES (?, ?, 1)",
-                       ("tester", password_hash.hash("testing-only-Password42")))
+        add_user("tester", password_hash.hash("testing-only-Password42"))
         yield c
+    engine_for(str(tmp_path / "test.sqlite3")).dispose()
 
 
 def login(client):
@@ -78,7 +79,10 @@ def test_rejected_jwt(client, monkeypatch, variant):
 def test_disabled_user(client):
     token = login(client)
     with connect() as db:
-        db.execute("UPDATE users SET active = 0 WHERE username = ?", ("tester",))
+        user = db.get(User, "tester")
+        user.active = False
+        db.add(user)
+        db.commit()
     assert client.post("/predict", json={"message": "test"},
                        headers={"Authorization": f"Bearer {token}"}).status_code == 401
     assert client.post("/auth/token", data={"username": "tester", "password": "testing-only-Password42"}).status_code == 401
@@ -102,7 +106,7 @@ def test_missing_secret_fails_closed(monkeypatch):
 
 def test_hash_is_argon2(client):
     with connect() as db:
-        value = db.execute("SELECT password_hash FROM users").fetchone()[0]
+        value = db.get(User, "tester").password_hash
     assert value.startswith("$argon2id$")
     assert "testing-only" not in value
 

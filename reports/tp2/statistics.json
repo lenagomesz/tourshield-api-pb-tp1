@@ -1,0 +1,22 @@
+{
+  "test": "Mann-Whitney U, bilateral, asymptotic, continuity/tie correction",
+  "hypothesis_origin": "H2 TP1; exploratory re-use of same dataset",
+  "alpha": 0.05,
+  "n_reservations": 750,
+  "n_locations": 600,
+  "u": 346424.0,
+  "p_value": 1.2824995009760216e-65,
+  "median_reservations": 12.0,
+  "median_locations": 8.0,
+  "median_difference": 4.0,
+  "cliffs_delta": 0.5396622222222223,
+  "probability_superiority_ties_half": 0.7698311111111111,
+  "bootstrap_median_difference_ci95": [
+    3.0,
+    5.0
+  ],
+  "bootstrap_resamples": 5000,
+  "seed": 42,
+  "pearson_chars_words": 0.9350790597812121,
+  "spearman_chars_words": 0.9214029022136339
+}

@@ -3,9 +3,14 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
+from fastapi.middleware.cors import CORSMiddleware
+from starlette.middleware.trustedhost import TrustedHostMiddleware
+from app.middleware import WebSecurity
+import os
+from urllib.parse import urlsplit
 from app.database import initialize
 from app.config import get_secret
-from app.routes import auth, health, predict
+from app.routes import auth, health, predict, reservations
 
 
 @asynccontextmanager
@@ -15,8 +20,18 @@ async def lifespan(app: FastAPI):
     yield
 
 
-app = FastAPI(title="TourShield API", version="0.1.0", lifespan=lifespan,
-              description="TP1: atendimento de turismo; predição ainda não implementada.")
+app = FastAPI(title="TourShield API", version="0.2.0", lifespan=lifespan,
+              docs_url=None, redoc_url=None, debug=False,
+              description="TP2: atendimento de turismo com controles OWASP; sem modelo de ML.")
+origins = [x.strip() for x in os.getenv("CORS_ORIGINS", "http://localhost:3000").split(",") if x.strip()]
+for origin in origins:
+    parsed = urlsplit(origin)
+    if parsed.scheme not in {"http", "https"} or not parsed.netloc or parsed.path or "*" in origin:
+        raise RuntimeError("CORS_ORIGINS deve conter origens explícitas sem caminho ou wildcard")
+app.add_middleware(TrustedHostMiddleware, allowed_hosts=["localhost", "127.0.0.1", "testserver"])
+app.add_middleware(CORSMiddleware, allow_origins=origins, allow_credentials=False,
+                   allow_methods=["GET", "POST"], allow_headers=["Authorization", "Content-Type"])
+app.add_middleware(WebSecurity)
 
 
 @app.exception_handler(RequestValidationError)
@@ -30,3 +45,4 @@ async def validation_error(request, exc):
 app.include_router(health.router)
 app.include_router(auth.router)
 app.include_router(predict.router)
+app.include_router(reservations.router)

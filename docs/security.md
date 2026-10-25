@@ -1,5 +1,8 @@
 # DFD e análise CIA - TourShield API
 
+> Histórico do TP1. Para os controles implementados no TP2, DFD atualizado e limites
+> atuais, consulte [owasp_tp2.md](owasp_tp2.md) e [findings ZAP](../reports/zap/findings.md).
+
 ## Fluxo atual (TP1)
 
 ```mermaid

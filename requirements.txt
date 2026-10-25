@@ -11,3 +11,6 @@ httpx==0.28.1
 nbformat==5.11.1
 nbconvert==7.17.2
 ipykernel==7.4.0
+sqlmodel==0.0.48
+scipy==1.18.1
+seaborn==0.13.2
