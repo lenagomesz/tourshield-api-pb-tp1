@@ -1,0 +1,73 @@
+{
+  "raw_shape": [
+    3000,
+    4
+  ],
+  "clean_rows": 3000,
+  "clean_export_columns": 6,
+  "dtypes": {
+    "sample_id": "string",
+    "message": "string",
+    "intent": "string",
+    "split": "string"
+  },
+  "missing": {
+    "sample_id": 0,
+    "message": 0,
+    "intent": 0,
+    "split": 0
+  },
+  "exact_duplicates": 0,
+  "pair_duplicates": 0,
+  "invalid_removed": 0,
+  "normalized_duplicates_removed": 0,
+  "conflicting_rows_removed": 0,
+  "cross_split_overlap_after": 0,
+  "intents": 20,
+  "split_counts": {
+    "train": 2000,
+    "test": 600,
+    "val": 400
+  },
+  "words": {
+    "count": 3000.0,
+    "mean": 10.259333333333334,
+    "std": 3.649363255822382,
+    "min": 2.0,
+    "25%": 8.0,
+    "50%": 10.0,
+    "75%": 12.0,
+    "max": 28.0
+  },
+  "chars": {
+    "count": 3000.0,
+    "mean": 50.08566666666667,
+    "std": 17.36884817284015,
+    "min": 8.0,
+    "25%": 38.0,
+    "50%": 48.0,
+    "75%": 60.0,
+    "max": 136.0
+  },
+  "iqr_upper_words": 18.0,
+  "long_messages_iqr": 98,
+  "groups": [
+    {
+      "grupo": "geolocalização",
+      "n": 600,
+      "mediana_palavras": 8.0
+    },
+    {
+      "grupo": "reservas",
+      "n": 750,
+      "mediana_palavras": 12.0
+    },
+    {
+      "grupo": "benefícios",
+      "n": 300,
+      "mediana_palavras": 10.0
+    }
+  ],
+  "shortest_median_intent": "current_location",
+  "longest_median_intent": "book_flight"
+}

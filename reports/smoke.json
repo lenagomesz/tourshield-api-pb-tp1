@@ -1,0 +1,13 @@
+{
+  "transport": "HTTP loopback, actual uvicorn process",
+  "health": 200,
+  "predict_without_token": 401,
+  "auth_token": 200,
+  "predict_with_token": 200,
+  "prediction": {
+    "intent": null,
+    "status": "placeholder",
+    "detail": "Modelo não implementado; nenhum benefício ou reserva foi autorizado."
+  },
+  "secrets": "temporary, not saved"
+}

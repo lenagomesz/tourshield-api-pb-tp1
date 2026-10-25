@@ -1,0 +1,5 @@
+,sample_id,message,intent,split
+count,3000,3000,3000,3000
+unique,3000,3000,20,3
+top,clinc-00700,does ireland have any travel alerts i should be aware of,travel_alert,train
+freq,1,1,150,2000

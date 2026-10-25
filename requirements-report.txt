@@ -1,0 +1,3 @@
+# Optional: rebuild the PDF (not required to run API or EDA).
+reportlab==5.1.0
+pypdf==6.21.2
