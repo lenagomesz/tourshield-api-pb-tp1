@@ -3,6 +3,10 @@
 *.md text eol=lf
 *.json text eol=lf
 *.ipynb text eol=lf
+*.js text eol=lf
+*.css text eol=lf
+*.yml text eol=lf
+app/static/swagger/* -text
 *.pdf binary
 *.PDF binary
 *.png binary

@@ -1,0 +1,31 @@
+{
+  "repository": "https://github.com/lenagomesz/tourshield-api-pb-tp1",
+  "latest_runs": [
+    {
+      "id": 40191034423,
+      "html_url": "https://github.com/lenagomesz/tourshield-api-pb-tp1/actions/runs/40191034423",
+      "head_sha": "35e0be9c98d70859e2afa890d2368b370c50d5a5",
+      "event": "push",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-10-25T11:57:36Z"
+    }
+  ],
+  "required_status_checks": {
+    "url": "https://api.github.com/repos/lenagomesz/tourshield-api-pb-tp1/branches/main/protection/required_status_checks",
+    "strict": true,
+    "contexts": [
+      "security-tests"
+    ],
+    "contexts_url": "https://api.github.com/repos/lenagomesz/tourshield-api-pb-tp1/branches/main/protection/required_status_checks/contexts",
+    "checks": [
+      {
+        "context": "security-tests",
+        "app_id": 15368
+      }
+    ]
+  },
+  "enforce_admins": true,
+  "allow_force_pushes": false,
+  "allow_deletions": false
+}
