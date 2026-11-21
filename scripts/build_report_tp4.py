@@ -1,5 +1,6 @@
 """Academic TP4 report from executed application/ML/functional evidence only."""
 import json
+import re
 from pathlib import Path
 from xml.etree import ElementTree as ET
 from xml.sax.saxutils import escape
@@ -14,9 +15,13 @@ OUT=ROOT/'reports/tp4'
 summary=json.loads((OUT/'classification_summary.json').read_text(encoding='utf-8'))
 conversation=json.loads((OUT/'agent_conversation.json').read_text(encoding='utf-8'))
 api=json.loads((OUT/'functional_api.json').read_text(encoding='utf-8'))
-suite=ET.parse(ROOT/'reports/tests_tp4.xml').getroot().find('testsuite')
+suite=ET.parse(ROOT/'reports/tests_defensive_tp4.xml').getroot().find('testsuite')
 assert suite is not None and int(suite.attrib['failures'])==0 and int(suite.attrib['errors'])==0
 tests=int(suite.attrib['tests'])
+defense=json.loads((ROOT/'pentest/evidencias/defensiva_tp4/controls.json').read_text(encoding='utf-8'))
+defense_summary=json.loads((ROOT/'pentest/evidencias/defensiva_tp4/summary.json').read_text(encoding='utf-8'))
+inventory=json.loads((ROOT/'pentest/evidencias/defensiva_tp4/route_inventory.json').read_text(encoding='utf-8'))
+assert tests==defense['pytest_passed'] and defense_summary['failed']==0
 metrics=pd.read_csv(OUT/'metrics.csv')
 perclass=pd.read_csv(OUT/'metrics_by_class.csv',index_col=0)
 grid=pd.read_csv(OUT/'grid_search.csv')
@@ -62,7 +67,7 @@ p('21 de novembro de 2026')
 story.append(Spacer(1,15))
 table([['Classificador','Integração','Verificação'],
        ['20 intenções\n93,67% de acurácia','FastAPI + JWT\nAgents SDK + ferramenta',f'{tests} testes aprovados\n3 turnos demonstrados']],[165,165,165])
-p('<b>Recorte desta entrega:</b> desenvolvimento da aplicação, aprendizado de máquina, integração e testes funcionais. A avaliação de segurança do título geral do TP4 será tratada em etapa separada e não integra os resultados deste relatório.')
+p('<b>Escopo consolidado:</b> desenvolvimento da aplicação, aprendizado de máquina, integração, testes funcionais e avaliação defensiva do código e da própria API local. O complemento registra 44 verificações HTTP reais, sem alvos externos ou varreduras por scanners.')
 p('<b>Transparência da demonstração:</b> o SDK, a ferramenta e a inferência HTTP foram executados; a geração textual é determinística e simulada. Não houve execução com um modelo OpenAI hospedado por falta de chave configurada.')
 p(f'<link href="{branch}" color="#16898C">Repositório de continuidade - branch TP4</link>')
 page()
@@ -75,7 +80,7 @@ table([['Continuidade','Implementação atual'],['Dados','CLINC150 curado, 3.000
        ['Novos componentes','app/classifier.py, rota /classify, app/agent.py e scripts de demonstração.'],
        ['Compatibilidade','/predict conserva seu contrato placeholder; notebooks e PDFs TP1-TP3 permanecem disponíveis.'],
        ['Identificação','Helena Gomes e Maria Paula; versão da API 0.4.0.']],[125,370])
-p('Os requisitos priorizados são: treinamento e avaliação confiáveis; persistência do pipeline; inferência autenticada; integração Agent/Runner/function_tool; conversa reproduzível; testes e documentação. A geração remota é identificada como integração implementada ainda não validada com credenciais.')
+p('Os requisitos priorizados são: treinamento e avaliação confiáveis; persistência do pipeline; inferência autenticada; integração Agent/Runner/function_tool; conversa reproduzível; testes e documentação. O complemento defensivo verifica JWT, permissões, ownership, administração, entradas e inventário da própria API. A geração remota continua não validada com credenciais.')
 p('Fluxo da aplicação','H2TS')
 code(['Mensagem -> Agent + Runner.run -> classify_intent',
       '   -> HTTP POST /classify + JWT do contexto',
@@ -181,14 +186,55 @@ p('Evidências: reports/tp4/agent_conversation.md e agent_conversation.json; tes
 page()
 
 title(10,'Testes funcionais e evidências')
-p(f'<b>Resultado real: {tests} testes aprovados, zero falhas e zero erros.</b> A suíte mantém os testes de regressão das entregas anteriores e acrescenta casos para a nova rota, startup do modelo, respostas de erro e ciclo SDK/ferramenta. O XML está em reports/tests_tp4.xml.')
+p(f'<b>Resultado atual: {tests} testes aprovados, zero falhas e zero erros.</b> A suíte completa inclui 66 casos da entrega funcional e 19 verificações adicionais neste complemento defensivo. O XML atual está em reports/tests_defensive_tp4.xml; reports/tests_tp4.xml preserva a execução anterior de 66 testes.')
 table([['Exemplo HTTP executado','Status','Evidência'],*[[x['case'],str(x['status']),x['path']] for x in api]],[180,70,245])
 p('Os exemplos HTTP são executados em loopback com banco, conta e segredo descartáveis. Os testes automatizados usam a mesma app via ASGI e um banco isolado por teste; nenhum usuário ou banco persistente anterior é alterado. 503 para modelo ausente/corrompido é coberto por pytest, não por falha em produção.')
 table([['Caso','Verificação'],['Startup','Modelo carregado no lifespan; classifier_ready=True.'],['Inferência','book_hotel para exemplo conhecido; probabilidade no intervalo e versão correta.'],['Erros de entrada','Branco, tipo numérico, texto longo, campos extras e body ausente retornam 422.'],['Artefato','Bytes com checksum inválido não são desserializados; ausência retorna 503.'],['Ferramenta','Schema visível contém somente text; sessão inválida é tratada; Runner invoca a API.']],[110,385])
-p('A execução local confirma o comportamento observado. Não equivale a teste de carga, teste com modelo remoto ou avaliação de segurança completa. O check já existente do GitHub Actions foi preservado; seu resultado remoto deve ser consultado no repositório.')
+p('A execução local confirma o comportamento observado. O complemento a seguir acrescenta verificação defensiva delimitada, sem equivaler a teste de carga, uso de modelo remoto ou auditoria completa. O check do GitHub Actions foi preservado; o resultado remoto pode ser consultado no repositório.')
 page()
 
-title(11,'Verificação do escopo e reprodução')
+title(11,'Avaliação defensiva: escopo e método')
+p('A complementação foi autorizada para o código e os testes locais do próprio TourShield. Foi iniciada uma instância temporária da mesma aplicação por Uvicorn, vinculada a 127.0.0.1 em porta efêmera. Banco, segredo e três contas fictícias foram descartados ao final; o .env e o banco persistente existentes foram preservados.')
+p(f'<b>Execução comprovada:</b> {defense_summary["requests"]} verificações HTTP, {defense_summary["passed"]} aprovadas e nenhuma divergência. Foram usados HTTPX e PyJWT para fixtures limitadas, com comparação de status, corpo e controles positivos/negativos. A suíte pytest/ASGI adicional confirma os mesmos princípios por regressão automatizada.')
+p('Tokens e senhas não foram exportados. O log identifica metodologia, entrada, resposta, interpretação e risco para cada controle. Os hashes do código avaliado e dos arquivos de evidência permitem rastrear a coleta; não demonstram segurança do projeto por si só.')
+p('Inventário do contrato','H2TS')
+table([['Método','Rota','Acesso']]+[[row['method'],row['path'],('JWT + allowlist' if row['path']=='/admin/status' else row['authentication'])] for row in inventory['contract_operations']],[65,275,155],small=True)
+p('Auxiliares identificados pela inspeção dos routers: GET/HEAD /openapi.json, GET /docs e mount /static. O endpoint de login recebe credenciais sem Bearer, mas emitir o JWT exige validá-las. Documentação e arquivos estáticos são públicos por decisão do projeto.')
+p('O inventário decorre da leitura HTTP de /openapi.json e da inspeção de app.routes. FastAPI/Uvicorn são conhecidos pelo código e pelo processo iniciado, não inferidos de banners. Não foram executados scanners ou testes contra terceiros nesta avaliação.')
+p('Evidências: pentest/log_parcial.md; pentest/evidencias/defensiva_tp4/http_results.json, route_inventory.json e summary.json. Reprodução: python -m scripts.evaluate_defensive_tp4; pytest tests/ -v --junitxml=reports/tests_defensive_tp4.xml.')
+page()
+
+title(12,'Controles e resultados reais')
+table([['Controle','Método e resultado observado'],
+    ['JWT','Válido: 200. Ausente, malformado, sem assinatura, expirado, chave divergente, HS384, iss/aud incorretos, nbf futuro e claims ausentes: 401. Allowlist HS256 definida no servidor.'],
+    ['Usuários','A e B autenticam com 200; sessão de B passa a receber 401 após active=False no banco de teste. Conta ativa é reavaliada a cada requisição.'],
+    ['Isolamento','Reservas de A/B: criação 201 e leitura própria 200. Leitura cruzada nos dois sentidos: 404, com corpo igual ao de recurso inexistente e sem destino.'],
+    ['Administração','/admin/status: sem sessão 401; usuário comum 403; administrador autorizado 200; role=admin em fixture de usuário comum e allowlist vazia: 403.'],
+    ['Parâmetros','Branco, null, número, campo extra/ausente e 4001 caracteres: 422. Fronteiras 1 e 4000: 200. owner/status do cliente na reserva: 422.'],
+    ['Inventário','GET /openapi.json: 200; sete operações do contrato mais as superfícies auxiliares identificadas em código. Não é prova de scanner.'],
+    ['Erros HTTP','JSON e UUID inválidos: 422; método incorreto: 405; rota ausente: 404; corpo acima de 16 KiB: 413. Marcador privado não foi refletido no erro.']],[105,390],small=True)
+p('Os testes pytest também confirmam 500 genérico em exceção interna induzida e 503 quando o artefato do classificador está ausente/corrompido. São cenários controlados de teste, não falhas registradas em produção.')
+p('A checagem administrativa foi feita em rota existente, com administrador autorizado como controle positivo. Portanto, 404 de rota ausente não foi usado como prova de bloqueio de função. A fixture role=admin foi assinada exclusivamente pelo harness, para verificar que a política ignora claims extras; não representa obtenção indevida da chave da aplicação.')
+p('O isolamento das reservas depende da consulta conjunta por UUID e owner do token. O identificador imprevisível não substitui a autorização. O modelo de intenções não participa da decisão de proprietário ou administrador.')
+p('Código principal: app/security.py, app/routes/reservations.py, app/routes/admin.py, app/models.py e app/middleware.py. Testes adicionais: tests/test_defensive_tp4.py. O log contém os 44 registros individuais e liga cada controle aos seus identificadores de evidência.')
+page()
+
+title(13,'Riscos residuais e pendências')
+table([['Tema','Observação e limite'],
+    ['Sessões JWT','Não existe revogação individual por denylist/jti. Desativação de conta foi testada; revogação por token/logout permanece pendente. A expiração atual limita a sessão a 15 minutos.'],
+    ['Administração','Allowlist depende da configuração do servidor. O teste cobre /admin/status; não há RBAC granular ou painel administrativo para avaliar.'],
+    ['Recursos','Somente criação e leitura de reservas existem. Futuras rotas de edição/exclusão precisam repetir a checagem de ownership; não se declara cobertura de funcionalidades inexistentes.'],
+    ['Inferência e volume','Limites de texto e body são verificados, mas não há quota específica por usuário em /classify. Capacidade, carga e rate limiting distribuído não foram avaliados.'],
+    ['Readiness','/health é liveness. Modelo indisponível resulta em 503 em /classify; uma sonda operacional específica para inferência ainda é melhoria pendente.'],
+    ['Implantação','HTTP loopback/ASGI não validam HTTPS, proxy reverso, ambiente público ou outros serviços do computador.'],
+    ['Artefato e domínio','Joblib continua exigindo origem confiável. A classificação fechada em inglês pode atribuir rótulos a mensagens sem relação com o domínio; isso não deve autorizar ações.']],[105,390],small=True)
+p('<b>Avaliação preliminar:</b> não foi observado descumprimento dos controles exercitados. O resultado vale para os casos e a versão do código examinados e não comprova ausência de vulnerabilidades. Nenhuma atividade pendente foi apresentada como teste aprovado.')
+p('A rejeição de HS384/none verifica o contrato HS256 vigente, não audita um fluxo RS256 que o TourShield não implementa. Não houve teste de quebra de segredo, descoberta por wordlists ou exploração externa nesta complementação. O modo OpenAI remoto também permanece pendente por ausência de credencial.')
+p('Rastreabilidade e próximos passos','H2TS')
+p('O log e os JSONs preservam entrada fictícia e resposta real, com tokens/senhas omitidos. Prioridades: definir política de revogação; quotas de inferência; readiness do modelo; gestão de configuração administrativa; e avaliação própria do ambiente de implantação antes de expô-lo.')
+page()
+
+title(14,'Verificação do escopo e reprodução')
 criteria=[
 ('Continuidade','docs/implementation_tp4.md','Concluído'),
 ('Pipeline TF-IDF + logística','eda/classification_tp4.ipynb','Concluído'),
@@ -201,14 +247,15 @@ criteria=[
 ('Validação e erros HTTP','tests/test_tp4.py','Concluído'),
 ('SDK e ferramenta integrada','app/agent.py','Concluído'),
 ('Conversa com modelo remoto','reports/tp4/agent_conversation.md','Parcial'),
-('Testes e documentação','reports/tests_tp4.xml; README.md','Concluído')]
+('Testes e documentação','reports/tests_defensive_tp4.xml; README.md','Concluído')]
 table([['Critério do escopo atual','Arquivo principal','Status']]+[list(x) for x in criteria],[170,245,80],small=True)
-p('A matriz de 12 itens é uma decomposição técnica do recorte solicitado, não a rubrica oficial completa do professor e não uma estimativa de nota. Há 11 itens concluídos e um parcial: a conversa executa o SDK/API, mas não um modelo hospedado. Segurança está fora desta matriz por decisão de escopo.')
+p('A matriz de 12 itens preserva a decomposição do recorte funcional, não a rubrica oficial completa do professor ou uma estimativa de nota. Há 11 itens concluídos e um parcial: a conversa executa o SDK/API, mas não um modelo hospedado. Os sete controles defensivos foram acrescentados nas seções 11 a 13 e no log, sem alterar artificialmente o denominador desta matriz.')
 code(['python -m pip install -r requirements-lock.txt',
       'python -m scripts.build_classification_notebook',
       'python -m scripts.demo_classify_tp4',
       'python -m scripts.demo_agent_tp4',
-      'pytest tests/ -v --junitxml=reports/tests_tp4.xml',
+      'python -m scripts.evaluate_defensive_tp4',
+      'pytest tests/ -v --junitxml=reports/tests_defensive_tp4.xml',
       'uvicorn main:app --reload --no-proxy-headers --no-server-header'])
 p('O modelo serializado já está no repositório; treinar de novo é necessário apenas para reprodução. Para novo ambiente, configurar JWT_SECRET aleatório e cadastrar usuário com scripts.create_user; para ambiente existente, reutilizar .env sem sobrescrevê-lo. Modo remoto: configurar OPENAI_API_KEY/OPENAI_MODEL e executar python -m app.agent.')
 verification=['# TourShield TP4 - Verificação do escopo atual','Helena Gomes e Maria Paula | 21/11/2026',
@@ -216,14 +263,16 @@ verification=['# TourShield TP4 - Verificação do escopo atual','Helena Gomes e
 verification += [f'| {a} | {b} | {c} |' for a,b,c in criteria]
 verification += ['', '11/12 itens concluídos (91,7%) neste recorte funcional, com pesos iguais e parciais contados como zero. Não é percentual da rubrica oficial completa ou previsão de nota.',
                  'Parcial: a conversa de três turnos usa SDK/API reais, com geração determinística simulada; não houve modelo OpenAI hospedado.',
-                 'A avaliação de segurança é uma etapa separada e não integra esta matriz.']
-(ROOT/'docs/verification_tp4.md').write_text('\n\n'.join(verification)+'\n',encoding='utf-8')
+                 'O complemento defensivo cobre os sete controles de pentest/log_parcial.md com 44 verificações HTTP e 85 testes totais aprovados. Essa matriz funcional não deve ser confundida com a rubrica oficial completa.']
+document=re.sub(r'(?m)^(\|.*\|)\n\n(?=\|)',r'\1\n','\n\n'.join(verification))
+(ROOT/'docs/verification_tp4.md').write_text(document+'\n',encoding='utf-8')
 page()
 
-title(12,'Conclusão e referências')
+title(15,'Conclusão e referências')
 p('O TourShield evoluiu da base exploratória para uma aplicação com classificação supervisionada persistida e inferência autenticada. A melhora sobre a baseline e sobre a configuração inicial indica aprendizado útil no benchmark. A integração entre SDK, ferramenta, HTTP e pipeline foi exercitada em três turnos e confirmada por testes.')
 p('Os principais limites são cobertura restrita às vinte intenções em inglês, ausência de dados operacionais/out-of-scope, probabilidades não calibradas e falta de execução com modelo OpenAI remoto. O sistema deve encaminhar pedidos e solicitar esclarecimentos, sem apresentar inferência como autorização de negócio.')
-p('Próximos passos: validar o agente hospedado com credenciais do operador; avaliar português e entradas desconhecidas; coletar métricas de latência e calibração; obter amostra temporal externa; e realizar a avaliação de segurança em etapa própria. O histórico dos TPs permanece disponível.')
+p('A avaliação defensiva local acrescentou 44 verificações HTTP aprovadas e elevou a suíte completa a 85 testes. Foram confirmadas as respostas esperadas para autenticação, permissões, ownership, administração, parâmetros e erros. Permanecem pendentes revogação individual de sessão, quotas de inferência e validação de implantação. Esses resultados delimitados não equivalem a uma auditoria completa.')
+p('Próximos passos: validar o agente hospedado com credenciais do operador; avaliar português e entradas desconhecidas; coletar métricas de latência e calibração; obter amostra temporal externa; e tratar os riscos residuais do log. O histórico dos TPs permanece disponível.')
 sources=[
 ('Larson et al. (2019). An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction.','https://aclanthology.org/D19-1131/'),
 ('CLINC150: código e dataset original; licença CC BY 3.0.','https://github.com/clinc/oos-eval'),

@@ -7,7 +7,8 @@ Implementar roteamento de intenções do atendimento turístico e sua integraç�
 agente. Mantidos app/, eda/, scripts/, tests/, data/, reports/ e output/pdf/. Os
 notebooks TP1-TP3, as rotas legadas e os controles existentes foram preservados.
 A versão passa a 0.4.0; o teste que verificava literalmente 0.3.0 acompanha a evolução.
-Esta entrega cobre aplicação e testes funcionais; a avaliação de segurança é separada.
+Esta entrega cobre aplicação, testes funcionais e o complemento defensivo local
+documentado em pentest/log_parcial.md.
 
 ## Dados e protocolo
 Recorte CLINC150 existente: 20 intenções, 3.000 mensagens em inglês; 2.000 treino,
@@ -77,7 +78,24 @@ O notebook é executável a partir da raiz do repositório, com data/ presente.
 Os seis exemplos funcionais são HTTP de verdade em loopback, em banco temporário;
 os testes ASGI usam a mesma app e banco isolado por teste. A suíte mantém a regressão
 dos TPs anteriores e acrescenta 19 verificações/variações para TP4. Resultado atual:
-66 testes aprovados, zero falhas ou erros. O CI existente continua usando o mesmo check.
+66 testes aprovados na entrega inicial. O complemento defensivo acrescentou 19 casos,
+com total atual de 85 aprovados, zero falhas ou erros, preservando o XML anterior.
+O CI existente continua usando o mesmo check.
+
+## Complemento de avaliação defensiva
+
+Sete controles foram examinados a partir do código e de uma instância temporária da
+mesma API: JWT, permissões/conta ativa, isolamento de reservas, função administrativa,
+validação de parâmetros, inventário e respostas de erro. O harness
+scripts/evaluate_defensive_tp4.py executou 44 verificações HTTP reais em loopback,
+sem scanners ou alvos externos. Dados, senhas, tokens e banco são fictícios/descartáveis.
+
+O log contém método, entrada, status/corpo efetivos, fonte e riscos. Evidência nova
+em pentest/evidencias/defensiva_tp4/; JUnit em reports/tests_defensive_tp4.xml.
+Não houve alteração no modelo ou na implementação dos controles para obter esses
+resultados. Questões pendentes: revogação individual de JWT, quotas de inferência,
+readiness operacional e avaliação de TLS/proxy/implantação. A aprovação dos casos
+exercitados não implica ausência de vulnerabilidades em toda a aplicação.
 
 ## Fluxo
 ```mermaid

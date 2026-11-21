@@ -1,4 +1,4 @@
-# Entrega TP4 - aplicação e testes funcionais
+# Entrega TP4 - aplicação e complemento defensivo local
 Integrantes: **Helena Gomes e Maria Paula**.
 
 - PDF: output/pdf/helena_gomes_PB_TP4.PDF.
@@ -10,6 +10,8 @@ Integrantes: **Helena Gomes e Maria Paula**.
 - Evidência da conversa: reports/tp4/agent_conversation.md e .json.
 - API HTTP: reports/tp4/functional_api.json.
 - Testes: tests/test_tp4.py e reports/tests_tp4.xml.
+- Complemento defensivo: pentest/log_parcial.md; tests/test_defensive_tp4.py.
+- Evidências atuais: pentest/evidencias/defensiva_tp4/ e reports/tests_defensive_tp4.xml.
 - Métricas: reports/tp4/metrics.csv, metrics_by_class.csv, grid_search.csv, figuras e summary.
 
 Repositório de continuidade: https://github.com/lenagomesz/tourshield-api-pb-tp1.
@@ -18,4 +20,6 @@ protegida; atualização para revisão não implica merge sem o check exigido.
 
 Limitação: o modo com modelo OpenAI remoto depende de chave e nome de modelo do
 operador. A conversa entregue executa o SDK real e a API real, com geração simulada.
-A avaliação de segurança fica fora do escopo atual, conforme a solicitação mais recente.
+A avaliação defensiva complementar cobre somente código e API local: 44 verificações
+HTTP e 85 testes totais aprovados. O log registra riscos residuais e pendências.
+Não foram executados scanners ou testes contra terceiros nesta complementação.

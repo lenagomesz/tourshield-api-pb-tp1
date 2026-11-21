@@ -2,13 +2,42 @@
 
 **Helena Gomes e Maria Paula | 21/11/2026**
 
-## Entrega atual: aplicação e testes funcionais
+## Entrega atual: aplicação, testes e avaliação defensiva local
 
 Continuação direta dos TP1-TP3. Mantidos dataset, splits, arquitetura modular,
 autenticação, reservas e notebooks anteriores. A API v0.4.0 acrescenta `/classify`
 com TF-IDF + LogisticRegression serializado; `/predict` conserva o contrato legado.
-O escopo desta entrega é desenvolvimento, integração, testes funcionais e documentação.
-A avaliação de segurança será tratada separadamente.
+O escopo inclui desenvolvimento, integração, testes funcionais e complemento defensivo
+baseado no código e na própria API local. Não houve testes contra sistemas externos.
+
+### Complemento defensivo - Helena Gomes e Maria Paula
+
+- [Log parcial](pentest/log_parcial.md): metodologia, resultados, riscos e pendências dos sete controles.
+- [Requisições/respostas reais](pentest/evidencias/defensiva_tp4/http_results.json).
+- [Inventário de rotas](pentest/evidencias/defensiva_tp4/route_inventory.json).
+- [Resumo e hashes de código](pentest/evidencias/defensiva_tp4/summary.json).
+- [Testes adicionais](tests/test_defensive_tp4.py) e [JUnit atual](reports/tests_defensive_tp4.xml).
+
+Resultado atual: **44 verificações HTTP locais aprovadas; 85 testes pytest aprovados**
+na suíte completa, zero falhas/erros. Foram confirmados os casos de validação JWT,
+conta ativa, isolamento A/B, allowlist administrativa, parâmetros e respostas HTTP.
+O contrato contém sete operações, além de documentação/OpenAPI e arquivos estáticos.
+Os resultados são limitados aos casos documentados; riscos residuais e atividades
+pendentes constam no log. As evidências da avaliação estão isoladas no diretório
+defensiva_tp4 e não reutilizam resultados de atividades anteriores.
+
+```powershell
+python -m scripts.evaluate_defensive_tp4
+pytest tests/ -v --junitxml=reports/tests_defensive_tp4.xml
+python -m scripts.build_defensive_log_tp4
+python -m scripts.build_report_tp4
+```
+
+O harness usa loopback e restaura as variáveis de configuração; não modifica o banco
+persistente ou .env. Segredos e tokens são descartados e não aparecem no JSON publicado.
+Readiness do modelo, revogação individual de JWT, quotas em /classify e verificação
+de TLS/proxy/implantação permanecem pendentes. Scanners e alvos externos não fizeram
+parte deste complemento.
 
 - [Notebook executado](eda/classification_tp4.ipynb) e [fonte](eda/classification_tp4.py).
 - [Pipeline joblib](models/intent_classifier.joblib) e [manifesto](models/manifest.json).
