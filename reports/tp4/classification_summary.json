@@ -1,0 +1,95 @@
+{
+  "best_params": {
+    "classifier__C": 10,
+    "tfidf__min_df": 1
+  },
+  "initial_validation_macro_f1": 0.9494900948135566,
+  "best_validation_macro_f1": 0.9574120207514989,
+  "validation_gain_pp": 0.7921925937942276,
+  "test_metrics": [
+    {
+      "modelo": "Dummy majorit\u00e1ria",
+      "accuracy": 0.05,
+      "macro_f1": 0.0047619047619047615,
+      "weighted_f1": 0.0047619047619047615,
+      "roc_auc_ovr_macro": 0.5
+    },
+    {
+      "modelo": "Inicial TP3",
+      "accuracy": 0.925,
+      "macro_f1": 0.9239793780600752,
+      "weighted_f1": 0.9239793780600756,
+      "roc_auc_ovr_macro": 0.9973654970760233
+    },
+    {
+      "modelo": "GridSearch final",
+      "accuracy": 0.9366666666666666,
+      "macro_f1": 0.9355548481815686,
+      "weighted_f1": 0.9355548481815688,
+      "roc_auc_ovr_macro": 0.9980701754385963
+    }
+  ],
+  "training_seconds": 3.254998500000056,
+  "errors": 38,
+  "artifact_bytes": 1185928,
+  "manifest": {
+    "version": "tourshield-intents-tp4-v1",
+    "sha256": "21670f4e89c69cfbbe4b21de904044ffb8b83411175828383a1c478b45a50d2e",
+    "sklearn_version": "1.9.1",
+    "classes": [
+      "book_flight",
+      "book_hotel",
+      "cancel_reservation",
+      "car_rental",
+      "carry_on",
+      "confirm_reservation",
+      "current_location",
+      "directions",
+      "distance",
+      "flight_status",
+      "international_visa",
+      "lost_luggage",
+      "plug_type",
+      "redeem_rewards",
+      "rewards_balance",
+      "share_location",
+      "travel_alert",
+      "travel_notification",
+      "travel_suggestion",
+      "vaccines"
+    ],
+    "dataset_sha256": "c5eae97da9c052768bb3826018daaf3ac62fe3cc117bc5386abb831656a57a91",
+    "best_params": {
+      "classifier__C": 10,
+      "tfidf__min_df": 1
+    },
+    "language": "en",
+    "train": 2000,
+    "val": 400,
+    "test": 600,
+    "final_fit": 2400
+  },
+  "weakest_classes": [
+    {
+      "index": "distance",
+      "precision": 1.0,
+      "recall": 0.6666666666666666,
+      "f1-score": 0.8,
+      "support": 30.0
+    },
+    {
+      "index": "redeem_rewards",
+      "precision": 0.92,
+      "recall": 0.7666666666666667,
+      "f1-score": 0.8363636363636363,
+      "support": 30.0
+    },
+    {
+      "index": "rewards_balance",
+      "precision": 0.8,
+      "recall": 0.9333333333333333,
+      "f1-score": 0.8615384615384616,
+      "support": 30.0
+    }
+  ]
+}

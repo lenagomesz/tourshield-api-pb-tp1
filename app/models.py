@@ -61,3 +61,21 @@ class PredictResponse(BaseModel):
     intent: str | None = None
     status: str = "placeholder"
     detail: str = "Modelo não implementado; nenhum benefício ou reserva foi autorizado."
+
+
+class ClassifyRequest(StrictInput):
+    text: str = Field(min_length=1, max_length=4000, strict=True)
+
+    @field_validator("text")
+    @classmethod
+    def nonblank_text(cls, value):
+        value=value.strip()
+        if not value:
+            raise ValueError("Texto vazio")
+        return value
+
+
+class ClassifyResponse(BaseModel):
+    intent: str
+    probability: float = Field(ge=0,le=1)
+    model_version: str

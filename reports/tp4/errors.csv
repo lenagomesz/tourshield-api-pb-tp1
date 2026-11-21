@@ -1,0 +1,39 @@
+sample_id,message,intent,predicted,probability
+clinc-18903,what's the mileage to get the the taj mahal in atlantic city,distance,directions,0.497359251291608
+clinc-18910,is it going to be much longer until i reach the bank,distance,travel_notification,0.5568927643043784
+clinc-18911,am i close to arriving at the post office,distance,directions,0.38584007044463003
+clinc-18913,when will i arrive at hy-vee,distance,flight_status,0.3743075445717186
+clinc-18917,when will the bus get me to vermont,distance,directions,0.4320271832351089
+clinc-18923,give me an eta on when i will arrive at my destination,distance,flight_status,0.36451616699716116
+clinc-18925,when will i get to orlando,distance,flight_status,0.5341976477339557
+clinc-18926,how much farther is orlando from my location,distance,share_location,0.2683700262549937
+clinc-18927,do i have a ways to go or am i close to getting to penn station,distance,directions,0.22932135524483152
+clinc-18929,can you tell me about what time i should be arriving at the airport,distance,flight_status,0.23768704030921067
+clinc-19090,i need to know my credit card's rewards balance,rewards_balance,redeem_rewards,0.5585112459860416
+clinc-19091,i wanna know my credit card's rewards balance,rewards_balance,redeem_rewards,0.48577540753371246
+clinc-19287,i lost all my stuff that i had packed,lost_luggage,current_location,0.2928835307989373
+clinc-19413,help me pick a new location to travel to,travel_suggestion,travel_alert,0.2040331619779278
+clinc-19417,i am itching to travel but don't know where to go,travel_suggestion,current_location,0.17620566114924985
+clinc-19804,can i bring perfume on the plane or what is the size limit,carry_on,flight_status,0.1671131900017394
+clinc-19807,can i fly with my razors or are there restrictions,carry_on,travel_alert,0.15601283118254847
+clinc-20566,does z used the same plus as we do in the united states,plug_type,travel_suggestion,0.276838953544461
+clinc-21226,whats my location,current_location,share_location,0.5970121433001524
+clinc-21238,i need assistance with my current location,current_location,share_location,0.4774272576601042
+clinc-21390,are visas needed to travel to jamaica,international_visa,vaccines,0.3075017898708849
+clinc-21393,are visas required to go to cuba,international_visa,vaccines,0.6385229853807619
+clinc-21398,is a visa necessary for traveling to south africa,international_visa,vaccines,0.3021301554284621
+clinc-21400,do americans need visas in canada,international_visa,plug_type,0.17148827970467445
+clinc-21418,are visas for international travel,international_visa,travel_alert,0.2555705521871293
+clinc-21488,i need some directions to phoenix,directions,vaccines,0.16728288101836059
+clinc-21877,i'd like for this person to know my location,share_location,current_location,0.7292843877383715
+clinc-21881,what is my current location,share_location,current_location,0.933919974930091
+clinc-21893,show allison how to get to me,share_location,directions,0.635108081015154
+clinc-21895,show cody where i am,share_location,current_location,0.5560233384492314
+clinc-21901,what are my mastercard points good for,redeem_rewards,rewards_balance,0.4876432652286081
+clinc-21902,how many points do i have to cash,redeem_rewards,rewards_balance,0.42396409017484576
+clinc-21914,what are the steps to get my rewards for my visa card,redeem_rewards,rewards_balance,0.79942935081638
+clinc-21916,how can i claim my rewards for my visa card,redeem_rewards,rewards_balance,0.8705676430955692
+clinc-21917,how can i get my rewards for my master card,redeem_rewards,rewards_balance,0.7782337509314411
+clinc-21918,where would i get my rewards for my master card,redeem_rewards,rewards_balance,0.8209013312622119
+clinc-21926,what can i get with my mastercard points,redeem_rewards,rewards_balance,0.5029789377484222
+clinc-22246,"march 2nd through march 18th, i'm going to need a jeep in frankfort",car_rental,book_hotel,0.29216589749814986

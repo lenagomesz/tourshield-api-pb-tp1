@@ -1,0 +1,37 @@
+{
+  "version": "tourshield-intents-tp4-v1",
+  "sha256": "21670f4e89c69cfbbe4b21de904044ffb8b83411175828383a1c478b45a50d2e",
+  "sklearn_version": "1.9.1",
+  "classes": [
+    "book_flight",
+    "book_hotel",
+    "cancel_reservation",
+    "car_rental",
+    "carry_on",
+    "confirm_reservation",
+    "current_location",
+    "directions",
+    "distance",
+    "flight_status",
+    "international_visa",
+    "lost_luggage",
+    "plug_type",
+    "redeem_rewards",
+    "rewards_balance",
+    "share_location",
+    "travel_alert",
+    "travel_notification",
+    "travel_suggestion",
+    "vaccines"
+  ],
+  "dataset_sha256": "c5eae97da9c052768bb3826018daaf3ac62fe3cc117bc5386abb831656a57a91",
+  "best_params": {
+    "classifier__C": 10,
+    "tfidf__min_df": 1
+  },
+  "language": "en",
+  "train": 2000,
+  "val": 400,
+  "test": 600,
+  "final_fit": 2400
+}

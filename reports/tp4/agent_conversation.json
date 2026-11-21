@@ -1,0 +1,35 @@
+{
+  "sdk_execution": "real",
+  "api_transport": "HTTP real em loopback",
+  "generation": "simulada: DemonstrationModel determinístico, sem LLM remoto",
+  "openai_remote_execution": false,
+  "conversation": [
+    {
+      "user": "I would like to book a hotel in Lisbon",
+      "assistant": "Intenção: book_hotel; probabilidade estimada: 88.4%. Posso encaminhar sua solicitação. Nenhuma reserva ou benefício foi autorizado.",
+      "tool_result": {
+        "intent": "book_hotel",
+        "probability": 0.884465593118022,
+        "model_version": "tourshield-intents-tp4-v1"
+      }
+    },
+    {
+      "user": "What is my rewards balance?",
+      "assistant": "Intenção: rewards_balance; probabilidade estimada: 98.3%. Posso encaminhar sua solicitação. Nenhuma reserva ou benefício foi autorizado.",
+      "tool_result": {
+        "intent": "rewards_balance",
+        "probability": 0.9831376376541758,
+        "model_version": "tourshield-intents-tp4-v1"
+      }
+    },
+    {
+      "user": "Please cancel my reservation",
+      "assistant": "Intenção: cancel_reservation; probabilidade estimada: 99.9%. Posso encaminhar sua solicitação. Nenhuma reserva ou benefício foi autorizado.",
+      "tool_result": {
+        "intent": "cancel_reservation",
+        "probability": 0.9992906093659709,
+        "model_version": "tourshield-intents-tp4-v1"
+      }
+    }
+  ]
+}
