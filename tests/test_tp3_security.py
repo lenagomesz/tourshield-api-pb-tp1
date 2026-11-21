@@ -28,7 +28,7 @@ def test_docs_assets_integrity_and_mime(client):
 
 def test_openapi_documents_auth_and_ownership(client):
     schema = client.get("/openapi.json").json()
-    assert schema["info"]["version"] == "0.3.0"
+    assert schema["info"]["version"] == "0.4.0"
     assert schema["components"]["securitySchemes"]["OAuth2PasswordBearer"]["flows"]["password"]["tokenUrl"] == "auth/token"
     assert schema["paths"]["/reservations/{reservation_id}"]["get"]["security"]
     assert "404" in schema["paths"]["/reservations/{reservation_id}"]["get"]["responses"]

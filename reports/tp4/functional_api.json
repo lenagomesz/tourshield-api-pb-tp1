@@ -1,0 +1,106 @@
+[
+  {
+    "case": "health",
+    "method": "GET",
+    "path": "/health",
+    "request_json": null,
+    "authentication": "ausente",
+    "status": 200,
+    "response": {
+      "status": "ok",
+      "service": "tourshield"
+    },
+    "transport": "HTTP real em loopback; banco e sessão descartáveis"
+  },
+  {
+    "case": "sem_token",
+    "method": "POST",
+    "path": "/classify",
+    "request_json": {
+      "text": "book a hotel"
+    },
+    "authentication": "ausente",
+    "status": 401,
+    "response": {
+      "detail": "Not authenticated"
+    },
+    "transport": "HTTP real em loopback; banco e sessão descartáveis"
+  },
+  {
+    "case": "token_invalido",
+    "method": "POST",
+    "path": "/classify",
+    "request_json": {
+      "text": "book a hotel"
+    },
+    "authentication": "presente (redigida)",
+    "status": 401,
+    "response": {
+      "detail": "Credenciais inválidas ou expiradas"
+    },
+    "transport": "HTTP real em loopback; banco e sessão descartáveis"
+  },
+  {
+    "case": "classificacao",
+    "method": "POST",
+    "path": "/classify",
+    "request_json": {
+      "text": "I would like to book a hotel"
+    },
+    "authentication": "presente (redigida)",
+    "status": 200,
+    "response": {
+      "intent": "book_hotel",
+      "probability": 0.7310590282272004,
+      "model_version": "tourshield-intents-tp4-v1"
+    },
+    "transport": "HTTP real em loopback; banco e sessão descartáveis"
+  },
+  {
+    "case": "texto_vazio",
+    "method": "POST",
+    "path": "/classify",
+    "request_json": {
+      "text": " "
+    },
+    "authentication": "presente (redigida)",
+    "status": 422,
+    "response": {
+      "detail": [
+        {
+          "loc": [
+            "body",
+            "text"
+          ],
+          "type": "value_error",
+          "msg": "Entrada inválida"
+        }
+      ]
+    },
+    "transport": "HTTP real em loopback; banco e sessão descartáveis"
+  },
+  {
+    "case": "campo_extra",
+    "method": "POST",
+    "path": "/classify",
+    "request_json": {
+      "text": "hotel",
+      "unexpected": true
+    },
+    "authentication": "presente (redigida)",
+    "status": 422,
+    "response": {
+      "detail": [
+        {
+          "loc": [
+            "body",
+            "unexpected"
+          ],
+          "type": "extra_forbidden",
+          "msg": "Entrada inválida"
+        }
+      ]
+    },
+    "transport": "HTTP real em loopback; banco e sessão descartáveis"
+  }
+]

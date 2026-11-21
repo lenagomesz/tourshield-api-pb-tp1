@@ -12,27 +12,36 @@ import os
 from urllib.parse import urlsplit
 from app.database import initialize
 from app.config import get_secret
-from app.routes import auth, health, predict, reservations, docs
+from app.routes import auth, health, predict, reservations, docs, classify, admin
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     get_secret()  # Fail closed: never start with an absent or short secret.
     initialize()
+    from app.classifier import load_classifier
+    try:
+        load_classifier()
+        app.state.classifier_ready=True
+    except (OSError, ValueError, KeyError, TypeError):
+        app.state.classifier_ready=False
     yield
 
 
-app = FastAPI(title="TourShield API", version="0.3.0", lifespan=lifespan,
+app = FastAPI(title="TourShield API", version="0.4.0", lifespan=lifespan,
               docs_url=None, redoc_url=None, debug=False,
-              description="""Atendimento turístico - TP3. Autentique com username/password em /auth/token.
+              description="""Atendimento turístico - TP4. Autentique com username/password em /auth/token.
 O JWT Bearer dura 15 minutos; login tem limite de 5 requisições/IP/60s.
-/predict é placeholder. Reservas são recursos locais de laboratório, nunca compras reais.
+/classify usa TF-IDF + LogisticRegression; /predict preserva o contrato legado placeholder.
+Reservas são recursos locais de laboratório, nunca compras reais.
 O proprietário é obtido do token e não pode ser escolhido pelo cliente.
 Coordenadas são declaradas pelo cliente e não comprovam presença ou elegibilidade.""",
               openapi_tags=[{"name": "health", "description": "Sonda de vida pública, sem detalhes internos."},
                             {"name": "auth", "description": "OAuth2 password + JWT; 401/422/429 em falhas."},
                             {"name": "predict", "description": "Entrada validada e autenticada, sem modelo treinado."},
-                            {"name": "reservations", "description": "Recursos de teste com ownership por usuário."}])
+                            {"name": "reservations", "description": "Recursos de teste com ownership por usuário."},
+                            {"name": "classify", "description": "20 intenções em inglês; predição não concede benefícios."},
+                            {"name": "admin", "description": "Função administrativa com allowlist definida no servidor."}])
 origins = [x.strip() for x in os.getenv("CORS_ORIGINS", "http://localhost:3000").split(",") if x.strip()]
 for origin in origins:
     parsed = urlsplit(origin)
@@ -55,6 +64,8 @@ async def validation_error(request, exc):
 app.include_router(health.router)
 app.include_router(auth.router)
 app.include_router(predict.router)
+app.include_router(classify.router)
+app.include_router(admin.router)
 app.include_router(reservations.router)
 app.include_router(docs.router)
 app.mount("/static", StaticFiles(directory=Path(__file__).resolve().parent / "app" / "static"), name="static")

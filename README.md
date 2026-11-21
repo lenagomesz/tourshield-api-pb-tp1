@@ -1,6 +1,76 @@
-# TourShield API - Turismo e Reservas | PB TP3
+# TourShield API - Turismo e Reservas | PB TP4
 
-**Helena Gomes | 25/10/2026**
+**Helena Gomes e Maria Paula | 21/11/2026**
+
+## Entrega atual: aplicação e testes funcionais
+
+Continuação direta dos TP1-TP3. Mantidos dataset, splits, arquitetura modular,
+autenticação, reservas e notebooks anteriores. A API v0.4.0 acrescenta `/classify`
+com TF-IDF + LogisticRegression serializado; `/predict` conserva o contrato legado.
+O escopo desta entrega é desenvolvimento, integração, testes funcionais e documentação.
+A avaliação de segurança será tratada separadamente.
+
+- [Notebook executado](eda/classification_tp4.ipynb) e [fonte](eda/classification_tp4.py).
+- [Pipeline joblib](models/intent_classifier.joblib) e [manifesto](models/manifest.json).
+- [Código do agente](app/agent.py) e [demonstração executável](scripts/demo_agent_tp4.py).
+- [Conversa de três turnos](reports/tp4/agent_conversation.md).
+- [Exemplos HTTP executados](reports/tp4/functional_api.json).
+- [Métricas](reports/tp4/metrics.csv), [testes XML](reports/tests_tp4.xml).
+- [Implementação e reprodução](docs/implementation_tp4.md).
+- [Matriz de verificação do escopo](docs/verification_tp4.md).
+- [Relatório final](output/pdf/helena_gomes_PB_TP4.PDF).
+
+Resultados: acurácia 93,67%, macro-F1 0,9356 e ROC-AUC OvR macro 0,9981;
+Dummy majoritária: 5%, 0,0048 e 0,5000. Grid de nove combinações: min_df={1,2,3}
+e C={0.1,1,10}; melhores valores min_df=1 e C=10. Refit em treino+validação após
+seleção; teste preservado. Mensagens em inglês; não validado em português ou out-of-scope.
+
+```powershell
+python -m pip install -r requirements-lock.txt
+# Reutilize seu .env existente; não o sobrescreva.
+uvicorn main:app --reload --no-proxy-headers --no-server-header
+```
+
+Para instalação inicial, siga a seção Instalação abaixo. O modelo já está presente
+em models/ e é carregado/verificado no lifespan de inicialização. Se estiver ausente
+ou inválido, as rotas legadas continuam disponíveis e /classify retorna 503.
+
+```powershell
+# Reproduzir treinamento/notebook e demonstrações sem LLM remoto:
+python -m scripts.build_classification_notebook
+python -m scripts.demo_classify_tp4
+python -m scripts.demo_agent_tp4
+pytest tests/ -v --junitxml=reports/tests_tp4.xml
+```
+
+As demonstrações criam banco, contas e segredo descartáveis em tmp/, servem a própria
+API em porta loopback escolhida pelo sistema e restauram as variáveis ao encerrar.
+Não alteram o banco existente ou .env. A demonstração usa **Agent, Runner.run e
+function_tool reais**, com HTTP e inferência reais; apenas a geração/orquestração
+textual do modelo é simulada por DemonstrationModel determinístico. Não equivale
+a uma execução com modelo OpenAI hospedado, pois não há chave configurada.
+
+Para usar o modo remoto, configure `OPENAI_API_KEY` e `OPENAI_MODEL` no .env (nomes
+sem valores em .env.example); execute a API e depois:
+
+```powershell
+python -m app.agent --username helena --api-url http://127.0.0.1:8000
+```
+
+A senha da API é solicitada sem eco; o JWT fica só no contexto da ferramenta. O
+histórico da conversa permanece em memória, tracing está desativado e os textos
+enviados ao modelo remoto obedecem à configuração escolhida pelo operador.
+O modo remoto foi implementado, mas não validado com credenciais nesta entrega.
+
+Contrato novo: `POST /classify`, Bearer obrigatório, body `{"text":"book a hotel"}`.
+Retorno: `intent`, `probability` entre 0 e 1 e `model_version`. Respostas: 401 para
+sessão ausente/inválida; 422 para texto vazio, tipo inválido, >4.000 caracteres ou
+campos extras; 503 para modelo indisponível. Não retorna o texto ou o token.
+
+## Histórico preservado dos TP1-TP3
+
+O conteúdo abaixo registra o estado anterior ao classificador TP4; referências a
+placeholder e ausência de agente nessa seção pertencem à entrega histórica TP3.
 
 Atendimento turístico com EDA completa e API FastAPI autenticada, agora com SQLModel,
 ownership, headers, CORS e rate limiting. Foco: fraude de benefícios e geolocalização.
